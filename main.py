@@ -1,55 +1,63 @@
-import math
+if __name__ == '__main__':
+    def main():
+        import math
 
-#Convert degrees/minutes/seconds (Lat and Long on Google Earth) to decimal degrees
+        #Convert degrees/minutes/seconds (Lat and Long on Google Earth) to decimal degrees
+        def DMS_to_DecDeg(geoDeg, geoMin, geoSec):
+            while True:
+                try:
+                    total = geoDeg + (geoMin/60) + (geoSec/3600)
+                    return(round(total,5))
+                except: print('Inputs require integers. Try again.')
 
-def DMS_DecDeg(geoDeg, geoMin, geoSec):
-    total = geoDeg + (geoMin/60) + (geoSec/3600)
-    return(total)
+        #Convert decimal degrees to vector notation        
+        def DecDeg_to_Vector(lat1, long1, lat2, long2):
+            xstart = lat1 * (40000/360) * 3280.4
+            xstop = lat2 * (40000/360) * 3280.4
+            ystart = long1 * (40000/360) * 3280.4
+            ystop =  long2 * (40000/360) * 3280.4
 
+            x_vector = xstop - xstart
+            y_vector = ystop - ystart
 
-def DMS_Vector(lat1, long1, lat2, long2):
-    xstart = lat1 * (40000/260) * 3280.4
-    xstop = lat2 * (40000/260) * 3280.4
-    ystart = long1 * (40000/260) * 3280.4
-    ystop =  long2 * (40000/260) * 3280.4
+            length = math.sqrt(x_vector**2 + y_vector**2)
+            angle = math.atan(y_vector/x_vector)
 
-    x_vector = xstop - xstart
-    y_vector = ystop - ystart
-
-    length = math.sqrt(x_vector**2 + y_vector**2)
-    angle = math.atan(y_vector/x_vector)
-
-    return(print('Length: {} Angle: {}'.format(length, angle)))
-
-
-prompt = input('Press 1 for DMS to Deciman Degrees Cenversion')
-
-if prompt == 1:
-    print("Convert DMS to Decimal Degrees?")
-    print("Enter Deg, Min, and Sec of First Latitude")
-    Deg_Lat1 = int(input("Enter Degrees: "))
-    Min_Lat1 = int(input("Enter Minutes: "))
-    Sec_Lat1 = int(input("Enter Seconds: "))
-    Latitude1 = DMS_DecDeg(Deg_Lat1, Min_Lat1, Sec_Lat1)
-    print(Latitude1)
-    print("Enter Deg, Min, and Sec of First Longitude")
-    Min_Long1 = int(input("Enter Degrees: "))
-    Deg_Long1 = int(input("Enter Minutes: "))
-    Sec_Long1 = int(input("Enter Seconds: "))
-    Longitude1 = DMS_DecDeg(Deg_Long1, Min_Long1, Sec_Long1)
-    print(Longitude1)
-    print("Enter Deg, Min, and Sec of Second Latitude")
-    Deg_Lat2 = int(input("Enter Degrees: "))
-    Min_Lat2 = int(input("Enter Minutes: "))
-    Sec_Lat2 = int(input("Enter Seconds: "))
-    Latitude2 = DMS_DecDeg(Deg_Lat2, Min_Lat2, Sec_Lat2)
-    print(Latitude2)
-    print("Enter Deg, Min, and Sec of Second Longitude")
-    Deg_Long2 = int(input("Enter Degrees: "))
-    Min_Long2 = int(input("Enter Minutes: "))
-    Sec_Long2 = int(input("Enter Seconds: "))
-    Longitude2 = DMS_DecDeg(Deg_Long2, Min_Long2, Sec_Long2)
-    print(Longitude2)
+            return(print('Length: {} Angle: {}'.format(length, angle)))
 
 
-DMS_Vector(Latitude1, Longitude1, Latitude2, Longitude2)
+        def menu():
+            #looping through inputs until correct input type is entered
+            while True:
+                print('Vector Calculator')
+                selection = None
+                try:
+                    selection = int(input('1: Convert DMS to Decimal Degrees\n2: Convert Decimal Degrees to Vector Notation\n(0 to quit)\n'))
+                    #DMS to decimal degrees
+                    if selection == 1:
+                        #looping through inputs until correct input type is entered
+                        while True:
+                            print('DMS to Decimal Degrees')
+                            try:
+                                geoDeg = int(input('Enter degrees: '))
+                                geoMin = int(input('Enter mins: '))
+                                geoSec = int(input('Enter secs: '))
+                                print('DMS to Decimal Degrees: ''{}{}, {} minutes, and {} seconds equals'.format(geoDeg,chr(176),geoMin,geoSec), '{}{}'.format(DMS_to_DecDeg(geoDeg, geoMin, geoSec),chr(176)))
+                                break
+                            except: print('***Inputs require integers. Try again.***')
+                    #decimal degrees to vector notation **not done**
+                    elif selection == 2:
+                        lat1 = int(input('Enter latitude'))
+                        DecDeg_to_Vector()
+                    #exit condition
+                    elif selection == 0:
+                        print('Thanks.')
+                        return
+                    else:
+                        print('***Entered value was not an option. Try again.***')
+                except: 
+                    print('***Incorrect type. Input requires an integer. Try again.***')
+        
+        menu()
+
+    main()
